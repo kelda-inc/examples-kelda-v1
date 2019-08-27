@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: web
+  template:
+    metadata:
+      labels:
+        service: web
+    spec:
+      initContainers:
+      - name: wait-for-mongo
+        image: busybox
+        args:
+        - /bin/sh
+        - -c
+        - >
+          set -x;
+          while ! wget mongo:27017; do
+            sleep 5;
+          done;
+      containers:
+      - name: web-server
+        image: keldaio/node-todo
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 100m
+            memory: 30Mi
+        imagePullPolicy: Always

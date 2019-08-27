@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mongod
+spec:
+  serviceName: mongodb-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+        replicaset: MainRepSet
+    spec:
+      containers:
+        - name: mongod-container
+          image: mongo
+          imagePullPolicy: Always
+          command:
+            - mongod
+            - --bind_ip_all
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: secrets-volume
+              mountPath: /etc/secrets-volume/mongosecret
+              subPath: mongosecret
+      volumes:
+        - name: secrets-volume
+          secret:
+            secretName: mongosecret
+            # https://coderstoolbox.net/number/
+            # Convert to octal to decimal because kube only accepts
+            # decimal as input
+            defaultMode: 256

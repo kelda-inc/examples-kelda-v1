@@ -1,0 +1,16 @@
+version: "v1alpha1"
+
+name: web-server
+
+sync:
+- from: "package.json"
+  to: /usr/src/app/package.json
+  triggerInit: true
+- from: "."
+  to: /usr/src/app
+  except: [".git", "node_modules"]
+  triggerInit: false
+
+command: ["node", "/usr/src/app/server.js"]
+
+initCommand: ["npm", "install"]
