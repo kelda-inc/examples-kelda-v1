@@ -11,7 +11,6 @@ command: ["node", "/usr/src/app/server.js"]
 # sync rule with  "triggerInit" set to true.
 initCommand: ["npm", "install"]
 
-# The files to sync from the local machine to the container.
 sync:
 
 # When the package-lock.json changes, run "npm install" in order to use the
