@@ -1,16 +1,30 @@
+# The version of the configuration format. Only v1alpha1 is currently supported.
 version: "v1alpha1"
 
-name: web-server
+# Name of the service. Must match the service name in the Workspace configuration.
+name: "web-server"
 
+# The command that gets run when there's a file change that matches a
+# sync rule with  "triggerInit" set to true.
+command: ["node", "/usr/src/app/server.js"]
+
+# The command that gets run when there's a file change that matches a
+# sync rule with  "triggerInit" set to true.
+initCommand: ["npm", "install"]
+
+# The files to sync from the local machine to the container.
 sync:
-- from: "package.json"
-  to: /usr/src/app/package.json
+
+# When the package-lock.json changes, run "npm install" in order to use the
+# new dependencies.
+- from: "package-lock.json"
+  to: /usr/src/app/package-lock.json
   triggerInit: true
+
+# When any other change happens, restart the process with the new code.
+# Don't sync the files in the .git and node_modules directories to avoid
+# watching too many files.
 - from: "."
   to: /usr/src/app
   except: [".git", "node_modules"]
   triggerInit: false
-
-command: ["node", "/usr/src/app/server.js"]
-
-initCommand: ["npm", "install"]
