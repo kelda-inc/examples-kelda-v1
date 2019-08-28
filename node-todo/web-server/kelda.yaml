@@ -16,13 +16,13 @@ sync:
 # When the package-lock.json changes, run "npm install" in order to use the
 # new dependencies.
 - from: "package-lock.json"
-  to: /usr/src/app/package-lock.json
+  to: "/usr/src/app/package-lock.json"
   triggerInit: true
 
 # When any other change happens, restart the process with the new code.
 # Don't sync the files in the .git and node_modules directories to avoid
 # watching too many files.
 - from: "."
-  to: /usr/src/app
+  to: "/usr/src/app"
   except: [".git", "node_modules"]
   triggerInit: false
