@@ -1,0 +1,6 @@
+version: "v1alpha1"
+name: "user"
+command: ["/tmp/user"]
+sync:
+  - from: "user"
+    to: "/tmp/user"

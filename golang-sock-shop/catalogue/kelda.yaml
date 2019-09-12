@@ -1,0 +1,8 @@
+version: "v1alpha1"
+name: "catalogue"
+image: "golang:1.13.0"
+command: ["go", "run", "-v", "/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue/cmd/cataloguesvc", "-port=80", "-images=/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue/images"]
+sync:
+  - from: "."
+    to: "/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue"
+    except: [".git", "docker", "api-spec"]

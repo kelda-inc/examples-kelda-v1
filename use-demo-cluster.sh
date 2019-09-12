@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+root_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+kubeconfig_path="${root_path}/demo-kubeconfig"
+
+export PS1="[kelda-demo] $PS1"
+export KUBECONFIG="${kubeconfig_path}"
+
+echo "You are now connected to the Kelda demo cluster."

@@ -1,0 +1,23 @@
+version: "v1alpha1"
+
+services:
+  - name: "carts"
+  - name: "carts-db"
+  - name: "catalogue"
+  - name: "catalogue-db"
+  - name: "front-end"
+  - name: "orders"
+  - name: "orders-db"
+  - name: "payment"
+  - name: "queue-master"
+  - name: "rabbitmq"
+  - name: "session-db"
+  - name: "shipping"
+  - name: "user"
+  - name: "user-db"
+
+
+tunnels:
+- serviceName: "front-end"
+  remotePort: 8079
+  localPort: 8080
