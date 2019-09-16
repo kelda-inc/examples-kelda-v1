@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 root_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 kubeconfig_path="${root_path}/demo-kubeconfig"
