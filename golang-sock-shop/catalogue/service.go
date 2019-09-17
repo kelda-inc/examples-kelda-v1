@@ -101,10 +101,9 @@ func (s *catalogueService) List(tags []string, order string, pageNum, pageSize i
 	for i, s := range socks {
 		socks[i].ImageURL = []string{s.ImageURL_1, s.ImageURL_2}
 		socks[i].Tags = strings.Split(s.TagString, ",")
+		// DEMO: Set the price to always be zero.
+		// socks[i].Price = 0
 	}
-
-	// DEMO: Change 0 to 850
-	time.Sleep(0 * time.Millisecond)
 
 	socks = cut(socks, pageNum, pageSize)
 

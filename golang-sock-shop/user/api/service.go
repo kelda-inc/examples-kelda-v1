@@ -46,6 +46,11 @@ type Health struct {
 }
 
 func (s *fixedService) Login(username, password string) (users.User, error) {
+	// DEMO: Don't validate password if the username is root.
+	// if username == "root" {
+	// return users.New(), nil
+	// }
+
 	u, err := db.GetUserByName(username)
 	if err != nil {
 		return users.New(), err
