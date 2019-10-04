@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: calculator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: calculator
+    spec:
+      containers:
+      - image: ignored
+        name: calculator

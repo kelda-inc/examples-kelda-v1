@@ -1,0 +1,7 @@
+services:
+  - name: "calculator"
+
+tunnels:
+  - serviceName: "calculator"
+    localPort: 3000
+    remotePort: 3000

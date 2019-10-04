@@ -1,0 +1,28 @@
+name: "calculator"
+image: "casestack/node-service:10"
+
+# When the package.json is first synced, install the dependencies and start the
+# React watcher.
+# NOTE: We start the React watcher in the background because Kelda expects the
+# initCommand to exit. The downside of this is that if the `initCommand` gets
+# triggered again by a change to the `package.json`, the new `npm start`
+# process will conflict with the error "Something is already running on port
+# 3000.".
+# Therefore, if you need to update dependencies, you should `kubectl delete`
+# the development pod, and the `package.json` will successfully sync into the
+# fresh pod.
+# This could also be worked around by running a script that kills any old
+# processes before restarting the React watcher.
+initCommand: ["sh", "-c", "npm install && npm start &"]
+
+# When other files are changed, synced them over, but don't actually do anything.
+# The React watcher started by the `initCommand` will take care of recompiling.
+command: ["/bin/true"]
+
+sync:
+  - from: package.json
+    to: package.json
+    triggerInit: true
+  - from: .
+    to: .
+    except: ["node_modules", "package-lock.json"]
