@@ -12,7 +12,7 @@
   "dependencies": {
     "big.js": "^5.2.2",
     "github-fork-ribbon-css": "^0.2.1",
-    "react": "^16.10.2",
+    "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "scripts": {
