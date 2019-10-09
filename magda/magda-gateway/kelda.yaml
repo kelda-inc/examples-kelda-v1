@@ -1,0 +1,16 @@
+version: 'v1alpha1'
+name: 'gateway'
+image: 'casestack/node-service:10'
+initCommand: ['npm', 'ci']
+sync:
+  - from: '.'
+    to: '.'
+    except: ['node_modules', '.git']
+
+  - from: 'package-lock.json'
+    to: 'package-lock.json'
+    triggerInit: true
+
+  - from: '~/.npmrc'
+    to: '/root/.npmrc'
+    triggerInit: true

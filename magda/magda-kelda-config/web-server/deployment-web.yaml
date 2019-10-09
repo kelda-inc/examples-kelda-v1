@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        service: web
+    spec:
+      containers:
+      - name: web
+        command: [
+            "node",
+            "--inspect",
+            "dist/index.js",
+            "--config", "/etc/config/config.json",
+            "--listenPort", "80",
+            "--baseExternalUrl", "http://minikube.data.gov.au:30100",
+            "--useLocalStyleSheet", "true",
+            "--registryApiBaseUrlInternal", "http://registry-api/v0"
+        ]
+        readinessProbe:
+          httpGet:
+            path: "/"
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 100m
+            memory: 30Mi
+        env:
+        - name: NODE_ENV
+          value: production
+        image: gcr.io/magda-221800/magda-web-server:0.0.50-4
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: "/etc/config"
+          name: config
+      volumes:
+      - name: config
+        configMap:
+          name: web-app-config
+          items:
+          - key: web.json
+            path: config.json
+      terminationGracePeriodSeconds: 0

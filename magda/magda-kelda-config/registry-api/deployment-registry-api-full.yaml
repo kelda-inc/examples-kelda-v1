@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: registry-api-full
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: registry-api-full
+    spec:
+      containers:
+      - name: registry-api-full
+        env:
+        - name: JWT_SECRET
+          value: S2VpYmFoN293YWlkYWViZQ==
+        - name: POSTGRES_USER
+          value: client
+        image: "gcr.io/magda-221800/magda-registry-api:0.0.50-0"
+        imagePullPolicy: IfNotPresent
+        command: [
+            "/app/bin/magda-registry-api",
+            "-Dhttp.port=80",
+            "-Dhttp.externalUrl.v0=http://minikube.data.gov.au:30100/api/v0/registry",
+            "-Ddb.default.url=jdbc:postgresql://registry-db/postgres",
+            "-Dakka.loglevel=INFO",
+            "-DauthApi.baseUrl=http://authorization-api",
+            "-Dscalikejdbc.global.loggingSQLAndTime.logLevel=info",
+            "-Dauthorization.skip=false",
+            "-Drole=full"
+        ]
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 750m
+          requests:
+            cpu: 250m
+            memory: 500Mi
+      terminationGracePeriodSeconds: 0

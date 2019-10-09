@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig-build.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@keldaio/authorization-api/dist/*": [
+                "../node_modules/@keldaio/authorization-api/src/*"
+            ],
+            "@keldaio/typescript-common/dist/*": [
+                "../node_modules/@keldaio/typescript-common/src/*"
+            ]
+        }
+    }
+}

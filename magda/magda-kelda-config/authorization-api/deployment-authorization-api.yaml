@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: authorization-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: authorization-api
+    spec:
+      containers:
+      - name: authorization-api
+        image: "gcr.io/magda-221800/magda-authorization-api:0.0.50-0"
+        imagePullPolicy: IfNotPresent
+        command: [
+            "node",
+            "/usr/src/app/component/dist/index.js",
+            "--listenPort", "80",
+            "--dbHost", "authorization-db",
+            "--dbPort", "5432"
+        ]
+        resources:
+          limits:
+            cpu: 50m
+          requests:
+            cpu: 10m
+            memory: 30Mi
+          
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: JWT_SECRET
+          value: S2VpYmFoN293YWlkYWViZQ==
+        - name: PGUSER
+          value: client
+      terminationGracePeriodSeconds: 0

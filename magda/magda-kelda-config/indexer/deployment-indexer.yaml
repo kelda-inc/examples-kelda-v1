@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: indexer
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: indexer
+    spec:
+      initContainers:
+      - name: wait-for-es
+        image: busybox:1.31.0
+        command: [
+            'sh',
+            '-c',
+            'until nc elasticsearch 9200 < /dev/null; do sleep 2; done'
+        ]
+      containers:
+      - name: indexer
+        env:
+        - name: S3_SECRET_KEY
+          value: dummy
+        - name: JWT_SECRET
+          value: S2VpYmFoN293YWlkYWViZQ==
+        resources:
+          limits:
+            cpu: 250m
+          requests:
+            cpu: 100m
+            memory: 250Mi
+          
+        image: "gcr.io/magda-221800/magda-indexer:0.0.50-0"
+        imagePullPolicy: IfNotPresent
+        command: [
+            "/app/bin/magda-indexer",
+            "-Dhttp.port=80",
+            "-Dregistry.webhookUrl=http://indexer/v0/registry-hook",
+            "-Dregistry.baseUrl=http://registry-api",
+            "-Dindexer.readSnapshots=false",
+            "-Dindexer.makeSnapshots=false",
+            "-Dakka.loglevel=INFO",
+            "-DelasticSearch.serverUrl=elasticsearch://elasticsearch:9200",
+            "-DelasticSearch.shardCount=1",
+            "-DelasticSearch.replicaCount=0",
+            "-Dauth.userId=00000000-0000-4000-8000-000000000000"
+        ]
+        volumeMounts:
+        - mountPath: /usr/regions
+          name: regions
+      volumes:
+      - name: regions
+        hostPath:
+          path: /var/regions
+      terminationGracePeriodSeconds: 0

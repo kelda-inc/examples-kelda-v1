@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: search-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: search-api
+    spec:
+      containers:
+      - name: search-api
+        image: "gcr.io/magda-221800/magda-search-api:0.0.50-0"
+        imagePullPolicy: IfNotPresent
+        command:
+          - "/app/bin/magda-search-api"
+          - "-Dhttp.port=80"
+          - "-Dakka.loglevel=INFO"
+          - "-DelasticSearch.serverUrl=elasticsearch://elasticsearch:9200"
+        readinessProbe:
+          httpGet:
+            path: "/v0/datasets"
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 200m
+          requests:
+            cpu: 50m
+            memory: 300Mi
+      terminationGracePeriodSeconds: 0

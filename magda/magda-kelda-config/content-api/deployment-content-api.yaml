@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: content-api
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: content-api
+    spec:
+      containers:
+      - name: content-api
+        image: "gcr.io/magda-221800/magda-content-api:0.0.50-0"
+        imagePullPolicy: IfNotPresent
+        command: [
+            "node",
+            "/usr/src/app/component/dist/index.js",
+            "--authApiUrl", "http://authorization-api/v0",
+            "--listenPort", "80",
+            "--dbHost", "content-db",
+            "--dbPort", "5432"
+        ]
+        resources:
+          limits:
+            cpu: 50m
+          requests:
+            cpu: 10m
+            memory: 30Mi
+          
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: JWT_SECRET
+          value: S2VpYmFoN293YWlkYWViZQ==
+        - name: PGUSER
+          value: client
+      terminationGracePeriodSeconds: 0

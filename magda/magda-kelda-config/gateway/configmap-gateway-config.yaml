@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "gateway-config"
+  labels:
+    pod: "gateway"
+data:
+  # When the config map is mounted as a volume, these will be created as files.
+  routes.json: '  {"admin":{"auth":true,"to":"http://admin-api/v0"},"apidocs":{"redirectTrailingSlash":true,"to":"http://apidocs-server/"},"auth":{"auth":true,"methods":["GET"],"to":"http://authorization-api/v0/public"},"content":{"to":"http://content-api/v0"},"correspondence":{"to":"http://correspondence-api/v0/public"},"registry":{"to":"http://registry-api-read-only/v0"},"registry-auth":{"auth":true,"to":"http://registry-api/v0"},"search":{"to":"http://search-api/v0"}}'
+  helmet.json: '  {}'
+  cors.json: '  {}'
+  csp.json: '  {"browserSniff":false,"directives":{"objectSrc":["''none''"],"scriptSrc":["''self''"]}}'
+  

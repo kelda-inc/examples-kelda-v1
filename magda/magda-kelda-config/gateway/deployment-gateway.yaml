@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        service: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: "gcr.io/magda-221800/magda-gateway:0.0.50-2"
+        imagePullPolicy: IfNotPresent
+        command: [
+            "node",
+            "src/index.js",
+            "--listenPort", "80",
+            "--externalUrl", "http://minikube.data.gov.au:30100",
+            "--dbHost", "session-db",
+            "--dbPort", "5432",
+            "--googleClientId", "288595486497-0h9rjtjnvc8hg4tj9vuvpkla782queb4.apps.googleusercontent.com",
+            "--enableAuthEndpoint", "true",
+            "--proxyRoutesJson", "/etc/config/routes.json",
+            "--helmetJson", "/etc/config/helmet.json",
+            "--cspJson", "/etc/config/csp.json",
+            "--corsJson", "/etc/config/cors.json",
+            "--web", "http://web",
+            "--authorizationApi", "http://authorization-api/v0",
+            "--previewMap", "http://preview-map:6110",
+            "--ckanUrl", "https://data.gov.au"
+        ]
+        volumeMounts:
+          - name: config
+            mountPath: /etc/config
+        readinessProbe:
+          httpGet:
+            path: /v0/healthz
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 200m
+          requests:
+            cpu: 50m
+            memory: 40Mi
+          
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: JWT_SECRET
+          value: S2VpYmFoN293YWlkYWViZQ==
+        - name: SESSION_SECRET
+          value: SWV4b3JlaXRvc2hlZTJtbw==
+        - name: USER_ID
+          value: 00000000-0000-4000-8000-000000000000
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secrets
+              key: google-client-secret
+              optional: true
+        - name: PGUSER
+          value: client
+      volumes:
+        - name: config
+          configMap:
+            name: gateway-config
+      terminationGracePeriodSeconds: 0

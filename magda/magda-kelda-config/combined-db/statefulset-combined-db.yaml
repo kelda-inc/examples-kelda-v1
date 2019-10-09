@@ -1,0 +1,62 @@
+
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: combined-db
+spec:
+  serviceName: combined-db
+  replicas: 1
+  selector:
+    matchLabels:
+      service: combined-db
+  template:
+    metadata:
+      labels:
+        service: combined-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: combined-db
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+            memory: 500Mi
+        image: "gcr.io/magda-221800/magda-postgres:0.0.50-2"
+        volumeMounts:
+        - mountPath: /var/pv/data
+          name: data
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          exec:
+            command: [ "/bin/sh", "-c", "pg_isready -h 127.0.0.1 -p 5432" ]
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/bash", 'pkill backup-push && gosu postgres psql -c "SELECT pg_stop_backup()"']
+        env:
+        - name: PGDATA
+          value: /var/pv/data
+        - name: PGUSER
+          value: postgres
+        - name: PGPASSWORD
+          value: RWlqM3dhaGxvaG5hZXdvbw==
+        - name: CLIENT_USERNAME
+          value: client
+        - name: CLIENT_PASSWORD
+          value: RWlqM3dhaGxvaG5hZXdvbw==
+      initContainers:
+      - image: "gcr.io/magda-221800/magda-postgres-data:0.0.50-2"
+        name: postgres-data
+        command: [ "sh", "-c", "cp -r /data/* /var/pv/data" ]
+        volumeMounts:
+        - mountPath: /var/pv/data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      terminationGracePeriodSeconds: 0

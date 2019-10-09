@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "scss-compiler-config"
+data:
+  image: "gcr.io/magda-221800/magda-scss-compiler:0.0.50-0"
+  scssVars: "<nil>"
