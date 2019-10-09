@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+OS="$(uname)"
+if [ "$OS" = "Darwin" ]; then
+    OS="osx"
+elif [ "$OS" = "Linux" ]; then
+    OS="linux"
+else
+    echo "Kelda can only be used on MacOS or Linux."
+    exit 1
+fi
+
+root_dir="$(dirname "$0")/.."
+export KUBECONFIG="${root_dir}/bin/kubeconfig"
+"${root_dir}/bin/kelda-${OS}" $@
