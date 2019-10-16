@@ -1,0 +1,10 @@
+version: "v1alpha1"
+autoSplitServices: true
+
+services:
+- name: "bookinfo"
+
+tunnels:
+- serviceName: "bookinfo-productpage"
+  localPort: 9080
+  remotePort: 9080
