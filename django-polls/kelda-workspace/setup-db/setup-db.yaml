@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: setup-db
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: [
+            'sh',
+            '-c',
+            'until nc db 5432 < /dev/null; do sleep 2; done'
+        ]
+      containers:
+      - name: migrate-db
+        image: keldaio/django-polls
+        command: [
+          'sh', '-c', "python manage.py migrate && python manage.py shell < /init/init-db.py"
+        ]
+        volumeMounts:
+        - name: init-db-script
+          mountPath: /init
+      volumes:
+      - name: init-db-script
+        configMap:
+          name: init-db-script
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db-script
+data:
+  init-db.py: |
+    from django.contrib.auth import get_user_model
+    from polls.models import Choice, Question
+    from django.utils import timezone
+
+    User = get_user_model()
+    User.objects.create_superuser('admin', 'admin@myproject.com', 'password')
+
+    q = Question(question_text='Cats or dogs?', pub_date=timezone.now())
+    q.save()
+    q.choice_set.create(choice_text='Cats', votes=0)
+    q.choice_set.create(choice_text='Dogs', votes=0)

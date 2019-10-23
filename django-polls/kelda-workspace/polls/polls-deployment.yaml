@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: polls
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: polls
+  template:
+    metadata:
+      labels:
+        service: polls
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: [
+            'sh',
+            '-c',
+            'until nc db 5432 < /dev/null; do sleep 2; done'
+        ]
+      containers:
+      - name: polls
+        image: keldaio/django-polls
+        command:
+          - "python3"
+          - "manage.py"
+          - "runserver"
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: "/polls"
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 100m
+            memory: 30Mi
+        imagePullPolicy: Always
