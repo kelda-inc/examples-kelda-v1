@@ -1,6 +1,3 @@
-services:
-  - name: "calculator"
-
 tunnels:
   - serviceName: "calculator"
     localPort: 3000

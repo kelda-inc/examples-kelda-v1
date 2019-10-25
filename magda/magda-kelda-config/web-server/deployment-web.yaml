@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: web
+  name: web-server
 spec:
   strategy:
     type: Recreate
@@ -9,10 +9,10 @@ spec:
   template:
     metadata:
       labels:
-        service: web
+        service: web-server
     spec:
       containers:
-      - name: web
+      - name: web-server
         command: [
             "node",
             "--inspect",

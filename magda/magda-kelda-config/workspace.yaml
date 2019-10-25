@@ -1,15 +1,4 @@
 version: "v1alpha1"
-services:
-  - name: "combined-db"
-  - name: "elasticsearch"
-  - name: "authorization-api"
-  - name: "preview-map"
-  - name: "gateway"
-  - name: "indexer"
-  - name: "registry-api"
-  - name: "search-api"
-  - name: "web-server"
-  - name: "content-api"
 
 tunnels:
   - serviceName: "gateway"
