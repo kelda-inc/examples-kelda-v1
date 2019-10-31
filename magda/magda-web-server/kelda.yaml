@@ -2,4 +2,4 @@ version: "v1alpha1"
 name: "web-server"
 sync:
   - from: 'src'
-    to: 'dist'
+    to: 'src'
