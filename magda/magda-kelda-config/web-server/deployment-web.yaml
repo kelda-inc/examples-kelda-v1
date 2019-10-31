@@ -16,7 +16,7 @@ spec:
         command: [
             "node",
             "--inspect",
-            "dist/index.js",
+            "src/index.js",
             "--config", "/etc/config/config.json",
             "--listenPort", "80",
             "--baseExternalUrl", "http://minikube.data.gov.au:30100",
@@ -39,7 +39,7 @@ spec:
         env:
         - name: NODE_ENV
           value: production
-        image: gcr.io/magda-221800/magda-web-server:0.0.50-4
+        image: gcr.io/magda-221800/magda-web-server:0.0.50-6
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: "/etc/config"

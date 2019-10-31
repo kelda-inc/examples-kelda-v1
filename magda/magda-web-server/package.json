@@ -1,7 +1,7 @@
 {
   "name": "@keldaio/web-server",
   "description": "The server that serves the MAGDA web front end.",
-  "version": "0.0.50-4",
+  "version": "0.0.50-6",
   "license": "Apache-2.0",
   "scripts": {
     "build": "yarn run compile",
@@ -43,7 +43,7 @@
   "dependencies": {
     "@gov.au/pancake-sass": "^1.3.2",
     "@keldaio/typescript-common": "^0.0.50-0",
-    "@keldaio/web-client": "^0.0.50-1",
+    "@keldaio/web-client": "^0.0.50-3",
     "express": "^4.15.3",
     "morgan": "^1.9.0",
     "request": "2.85.0",
