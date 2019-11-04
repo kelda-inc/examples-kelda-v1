@@ -1,6 +1,6 @@
 #!/bin/sh
 
-root_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root_path="$(command cd "$(dirname "${BASH_SOURCE[0]}")" && command pwd)"
 kubeconfig_path="${root_path}/demo-kubeconfig"
 
 export PS1="[kelda-demo] $PS1"

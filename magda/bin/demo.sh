@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Use the absolute path so that we properly resolve paths after changing
 # directories if the script was invoked as a relative path.
-bin_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bin_path="$(command cd "$(dirname "${BASH_SOURCE[0]}")" && command pwd)"
 root_dir="$(dirname "${bin_path}")"
 export KUBECONFIG="${root_dir}/bin/kubeconfig"
 

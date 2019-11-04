@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-parent_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+parent_path="$(command cd "$(dirname "${BASH_SOURCE[0]}")" && command pwd)"
 workspace="${parent_path}/kelda-workspace/workspace.yaml"
 
 if [ "${USING_DEMO_KELDA_CLUSTER}" == "true" ]; then
