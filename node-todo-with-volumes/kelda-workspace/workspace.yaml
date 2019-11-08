@@ -1,11 +1,4 @@
-# Sample workspace.yaml file that defines three services, and proxies
-# ports from one service to the local workstation.
-
 version: "v1alpha1"
-
-services:
-  - name: "mongodb"
-  - name: "web-server"
 
 tunnels:
 - serviceName: "web-server"

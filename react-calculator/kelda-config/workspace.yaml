@@ -1,3 +1,5 @@
+version: "v1alpha1"
+
 tunnels:
   - serviceName: "calculator"
     localPort: 3000
