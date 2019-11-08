@@ -10,5 +10,7 @@ spec:
         name: calculator
     spec:
       containers:
-      - image: ignored
+      # The image isn't actually used since it's overriden in the Calculator's
+      # Sync Configuration.
+      - image: alpine
         name: calculator
