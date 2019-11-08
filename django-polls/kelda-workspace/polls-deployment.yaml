@@ -27,11 +27,12 @@ spec:
           - "python3"
           - "manage.py"
           - "runserver"
+          - "0.0.0.0:8000"
         ports:
         - containerPort: 8000
         readinessProbe:
           httpGet:
-            path: "/polls"
+            path: "/"
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 10
