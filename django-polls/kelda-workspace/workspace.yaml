@@ -1,8 +1,5 @@
 version: "v1alpha1"
-services:
-  - name: "polls"
-  - name: "db"
-  - name: "setup-db"
+
 tunnels:
   - serviceName: "polls"
     localPort: 8000
