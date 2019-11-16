@@ -1,8 +1,15 @@
 version: "v1alpha1"
 name: "catalogue"
 image: "golang:1.13.0"
-command: ["go", "run", "-v", "/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue/cmd/cataloguesvc", "-port=80", "-images=/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue/images"]
+
+# Compile the binary separately from running it so that Kelda treats the
+# compile time as part of the "Syncing". This way, once the status is "Synced",
+# the application will probably be up and running.
+initCommand: ["go", "install", "-v", "github.com/kelda-inc/examples/golang-sock-shop/catalogue/cmd/cataloguesvc"]
+command: ["cataloguesvc", "-port=80", "-images=/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue/images"]
+
 sync:
   - from: "."
     to: "/go/src/github.com/kelda-inc/examples/golang-sock-shop/catalogue"
+    triggerInit: true
     except: [".git", "docker", "api-spec"]
