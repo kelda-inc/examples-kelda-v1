@@ -8,6 +8,9 @@ function getTodos(res) {
             res.send(err);
         }
 
+        // Uncomment the following line to add 'Kelda: ' before each todo item.
+        // todos.forEach((todo) => { todo['text'] = 'Kelda: ' + todo['text']; });
+
         res.json(todos); // return all todos in JSON format
     });
 };
