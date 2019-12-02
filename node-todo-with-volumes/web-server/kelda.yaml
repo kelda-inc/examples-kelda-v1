@@ -1,30 +1,30 @@
 # The version of the configuration format. Only v1alpha1 is currently supported.
 version: "v1alpha1"
 
-image: "node:10"
+image: 'casestack/node-service:10'
 
 # Name of the service. Must match the service name in the Workspace configuration.
 name: "web-server"
 
 # The command that gets run after each sync.
-command: ["sh", "-c", "cd /usr/src/app && node /usr/src/app/server.js"]
+command: ["node", "server.js"]
 
 # The command that gets run when there's a file change that matches a
 # sync rule with  "triggerInit" set to true.
-initCommand: ["sh", "-c", "cd /usr/src/app && npm install"]
+initCommand: ["npm", "install"]
 
 sync:
 
 # When the package-lock.json changes, run "npm install" in order to use the
 # new dependencies.
 - from: "package-lock.json"
-  to: "/usr/src/app/package-lock.json"
+  to: "package-lock.json"
   triggerInit: true
 
 # When any other change happens, restart the process with the new code.
 # Don't sync the files in the .git and node_modules directories to avoid
 # watching too many files.
 - from: "."
-  to: "/usr/src/app"
+  to: "."
   except: [".git", "node_modules"]
   triggerInit: false

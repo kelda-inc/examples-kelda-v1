@@ -42,3 +42,10 @@ spec:
             cpu: 100m
             memory: 30Mi
         imagePullPolicy: Always
+        volumeMounts:
+          - name: node-modules-volume
+            mountPath: /opt/cs-service
+      volumes:
+      - name: node-modules-volume
+        persistentVolumeClaim:
+          claimName: web-server-node-modules-pvc
