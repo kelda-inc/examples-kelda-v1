@@ -1,0 +1,8 @@
+version: "v1alpha1"
+services:
+  - name: "hello"
+    script: ["kustomize", "build", "./overlays/development"]
+tunnels:
+  - serviceName: "hello"
+    localPort: 8080
+    remotePort: 8080

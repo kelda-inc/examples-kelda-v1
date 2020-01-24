@@ -1,0 +1,10 @@
+namePrefix: development-
+commonLabels:
+  variant: development
+  org: acmeCorporation
+commonAnnotations:
+  note: Hello, I am development!
+resources:
+- ../../base/
+patchesStrategicMerge:
+- map.yaml
